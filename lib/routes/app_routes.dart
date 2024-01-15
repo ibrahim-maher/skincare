@@ -5,5 +5,6 @@ class Routes {
   static const SIGN_UP = '/signUp';
   static const PATIENT_SIGN_UP = '/patientSignUp';
   static const DOCTOR_SIGN_UP = '/doctorSignUp';
+
 // Add more routes as needed
 }
