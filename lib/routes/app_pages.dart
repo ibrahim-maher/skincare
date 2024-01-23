@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../view/auth/doctor_sign_up_view.dart';
 import '../view/auth/patient_sign_up_view.dart';
+import '../view/home_screen.dart';
 import '../view/onboarding.dart';
 import '../view/auth/sign_in_screen.dart';
 import '../view/auth/sign_up_screen.dart';
@@ -34,6 +35,12 @@ class AppPages {
       name: Routes.DOCTOR_SIGN_UP,
       page: () => DoctorSignUpView(),
     ),
+    GetPage(
+      name: Routes.HomeScreen,
+      page: () => HomeScreen(),
+    ),
     // Add more GetPage instances as needed
   ];
 }
+
+

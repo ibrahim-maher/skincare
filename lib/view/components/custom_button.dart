@@ -3,9 +3,9 @@ import '../../app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
   final Color backgroundColor;
   final Color textColor;
+  final Function(BuildContext) onPressed;
 
   CustomButton({
     Key? key,
@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
         primary: backgroundColor,
         onPrimary: textColor,
       ),
-      onPressed: onPressed,
+      onPressed: () => onPressed(context),
       child: Text(text),
     );
   }

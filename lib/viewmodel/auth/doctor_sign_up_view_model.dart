@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DoctorSignUpViewModel {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -44,12 +46,68 @@ class DoctorSignUpViewModel {
     return null;
   }
 
-  void signUp() {
+  Future<void> signUp(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      // Implement the sign-up logic
-      // This might involve sending data to a backend or using an authentication service
-      // Example: AuthService.signUpDoctor(name, email, password, specialization, licenseNumber)
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        String userId = userCredential.user!.uid;
+
+        await FirebaseFirestore.instance.collection('doctors').doc(userId).set({
+          'name': nameController.text.trim(),
+          'email': emailController.text.trim(),
+          'specialization': specializationController.text.trim(),
+          'licenseNumber': licenseNumberController.text.trim(),
+          // Add other attributes as needed
+        });
+
+        _showSuccessDialog(context);
+      } on FirebaseAuthException catch (e) {
+        _showErrorDialog(context, "Firebase Auth Error: ${e.message}");
+      } catch (e) {
+        _showErrorDialog(context, "An unexpected error occurred: $e");
+      }
     }
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Registration Successful'),
+        content: Text('You have successfully signed up as a doctor.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              Navigator.pushReplacementNamed(context, '/doctorDashboard'); // Replace with your doctor dashboard route
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Close'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void dispose() {

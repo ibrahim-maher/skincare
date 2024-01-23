@@ -4,7 +4,6 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../app_colors.dart';
 import '../../routes/app_routes.dart';
 import '../../viewmodel/auth/sign_up_view_model.dart';
-import '../components/custom_app_bar.dart';
 import '../components/custom_button.dart';
 import '../components/form_input_field.dart';
 
@@ -21,11 +20,10 @@ class SignUpView extends StatelessWidget {
 
   void _continueAsPatient(BuildContext context) {
     // Navigate to the Patient SignUp Screen
-
     Get.offNamed(Routes.PATIENT_SIGN_UP);
-
     // Navigator.pushNamed(context, '/patientSignUp');
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +72,14 @@ class SignUpView extends StatelessWidget {
                   SizedBox(height: 24),
                   CustomButton(
                     text: 'Continue as Patient',
-                    onPressed: () => _continueAsPatient(context),
+
+                    onPressed: (context) => _continueAsPatient(context),
                   ),
                   SizedBox(height: 12),
                   CustomButton(
                     text: 'Continue as Doctor',
                     backgroundColor: AppColors.secondaryColor,
-                    onPressed: () => _continueAsDoctor(context),
+                    onPressed: (context) => _continueAsDoctor(context),
                   ),
                   SizedBox(height: 24),
                   Row(

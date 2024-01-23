@@ -37,6 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   image_picker: ^1.0.5
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  tflite_flutter: ^0.10.4
+  image: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +68,9 @@ flutter:
 
   assets:
     - assests/images/
+    - assests/model.tflite
+    - assests/labels.txt
+
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 

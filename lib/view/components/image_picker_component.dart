@@ -11,7 +11,7 @@ class ImagePickerComponent extends StatefulWidget {
 class _ImagePickerComponentState extends State<ImagePickerComponent> {
   File? _image;
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(BuildContext context) async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {

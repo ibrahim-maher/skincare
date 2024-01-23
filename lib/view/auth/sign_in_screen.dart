@@ -78,8 +78,9 @@ class SignInView extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   GestureDetector(
-                    onTap: viewModel.forgotPassword,
-                    child: const Text(
+                    onTap: () {
+                      viewModel.forgotPassword(context);
+                    },                    child: const Text(
                       'Forgot Password?',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: AppColors.quaternaryColor),

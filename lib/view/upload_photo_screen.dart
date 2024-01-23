@@ -18,8 +18,11 @@ class UploadPhotoScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Display the selected or captured image
             Obx(() {
-              if (controller.selectedImagePath.value.isNotEmpty) {
+              if (controller.isLoading.isTrue) {
+                return CircularProgressIndicator();
+              } else if (controller.selectedImagePath.value.isNotEmpty) {
                 return Image.file(
                   File(controller.selectedImagePath.value),
                   width: 300,
@@ -33,12 +36,33 @@ class UploadPhotoScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: controller.pickImage,
-              child: Text('Select Image'),
+              child: Text('Select Image from Gallery'),
             ),
             ElevatedButton(
               onPressed: controller.captureImage,
-              child: Text('Capture Image'),
+              child: Text('Capture Image from Camera'),
             ),
+            SizedBox(height: 20),
+            // Button to run inference on the selected image
+            ElevatedButton(
+              onPressed: () {
+                if (controller.selectedImagePath.value.isNotEmpty) {
+                  controller.runInference(controller.selectedImagePath.value);
+                } else {
+                  // Show an alert or a Snackbar if no image is selected
+                  Get.snackbar("No Image", "Please select or capture an image first.");
+                }
+              },
+              child: Text('Run Inference'),
+            ),
+            // Display inference results
+            Obx(() {
+              if (controller.inferenceResults.isNotEmpty) {
+                return Text('Inference Results: ${controller.inferenceResults}');
+              } else {
+                return SizedBox.shrink(); // Empty space if no results
+              }
+            }),
           ],
         ),
       ),

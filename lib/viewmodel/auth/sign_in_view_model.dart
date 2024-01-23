@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../routes/app_routes.dart';
 
 class SignInViewModel {
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -27,25 +28,77 @@ class SignInViewModel {
     return null;
   }
 
-  void signIn() {
+  Future<void> signIn(BuildContext context) async {
     if (formKey.currentState!.validate()) {
-      // Perform the sign-in operation with the provided credentials
-      // For example, using a FirebaseAuth instance:
-      // FirebaseAuth.instance.signInWithEmailAndPassword(
-      //   email: emailController.text,
-      //   password: passwordController.text,
-      // );
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+        // Navigate to the next screen after successful sign-in
+        Get.offNamed('/HomeScreen'); // Replace with your next screen route
+      } on FirebaseAuthException catch (e) {
+        _showErrorDialog(context, e.message ?? 'An error occurred during sign in.');
+      }
     }
   }
 
   void navigateToSignUp() {
     Get.offNamed(Routes.SIGN_UP);
-
   }
 
-  void forgotPassword() {
-    // Implement forgot password functionality
-    // For example, sending a password reset email:
-    // FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+  Future<void> forgotPassword(BuildContext context) async {
+    if (emailController.text.isEmpty || !emailController.text.contains('@')) {
+      _showErrorDialog(context, 'Please enter a valid email.');
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text.trim());
+      _showSuccessDialog(context, 'Password reset email sent. Please check your email.');
+    } on FirebaseAuthException catch (e) {
+      _showErrorDialog(context, e.message ?? 'An error occurred during password reset.');
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Close'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Success'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
   }
 }

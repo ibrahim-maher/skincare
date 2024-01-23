@@ -1,0 +1,7 @@
+('akiec', 'Actinic keratoses and intraepithelial carcinomae')
+('bcc', ' basal cell carcinoma')
+('bkl', 'benign keratosis-like lesions')
+('df', 'dermatofibroma')
+('nv', ' melanocytic nevi')
+('vasc', ' pyogenic granulomas and hemorrhage')
+('mel', 'melanoma')

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import '../app_colors.dart';
 import 'onboarding.dart';
 
