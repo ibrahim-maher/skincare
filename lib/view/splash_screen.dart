@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
+import 'home_screen.dart';
 import 'onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,13 +15,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-      Duration(seconds: 3),
-          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => OnboardingScreen())), // Replace with your next screen class
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _navigateUser());
   }
 
+  void _navigateUser() {
+    // Check if user is signed in
+    if (FirebaseAuth.instance.currentUser != null) {
+      // If the user is signed in, navigate to the HomeScreen
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => HomeScreen(), // Replace HomeScreen with your home screen widget
+      ));
+    } else {
+      // If the user is not signed in, navigate to OnboardingScreen after a delay
+      Timer(
+        Duration(seconds: 3),
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => OnboardingScreen())),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

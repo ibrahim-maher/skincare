@@ -23,6 +23,7 @@ class Doctor {
       specialty: json['specialty'],
       qualifications: List<String>.from(json['qualifications']),
       bio: json['bio'],
+
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skincare/viewmodel/auth/patient_sign_up_view_model.dart';
 import '../../app_colors.dart';
 import '../components/custom_app_bar.dart';
@@ -73,7 +74,7 @@ class PatientSignUpView extends StatelessWidget {
   Widget _buildSignInPrompt(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Implement navigation to sign in page
+        Get.offAllNamed('/signIn'); // Navigate the user to the login screen after logging out
       },
       child: RichText(
         textAlign: TextAlign.center,

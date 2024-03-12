@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,16 +28,34 @@ class SignInViewModel {
     }
     return null;
   }
-
   Future<void> signIn(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),
         );
-        // Navigate to the next screen after successful sign-in
-        Get.offNamed('/HomeScreen'); // Replace with your next screen route
+
+        // Assuming the users' roles are stored in a collection named 'users'
+        // with the document ID equal to the user's UID
+        // and that the role is stored in a field named 'role'
+        if (userCredential.user != null) {
+          String uid = userCredential.user!.uid;
+          DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+          if (userDoc.exists) {
+            String role = userDoc.get('role');
+            if (role == 'doctor') {
+              Get.offNamed('/DoctorScreen'); // Navigate to the doctor's screen
+            } else if (role == 'patient') {
+              Get.offNamed('/PatientScreen'); // Navigate to the patient's screen
+            } else {
+              _showErrorDialog(context, 'Your role is not defined. Contact support.');
+            }
+          } else {
+            _showErrorDialog(context, 'User data not found. Contact support.');
+          }
+        }
       } on FirebaseAuthException catch (e) {
         _showErrorDialog(context, e.message ?? 'An error occurred during sign in.');
       }

@@ -61,7 +61,7 @@ class DoctorSignUpViewModel {
           'email': emailController.text.trim(),
           'specialization': specializationController.text.trim(),
           'licenseNumber': licenseNumberController.text.trim(),
-          // Add other attributes as needed
+          'role': 'doctor',
         });
 
         _showSuccessDialog(context);
